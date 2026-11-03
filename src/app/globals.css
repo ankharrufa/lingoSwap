@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #ff6b4a;
+  --color-brand-dark: #d94a2b;
+  --color-brand-soft: #ffe8e1;
+  --color-mint: #2bb3a3;
+  --color-mint-soft: #dcf5f1;
+  --color-sun: #ffc23d;
+  --color-ink: #1f2430;
+  --color-ink-soft: #6b7280;
+  --color-paper: #fff8f3;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans",
+    "Noto Sans Arabic", "Geeza Pro", Tahoma, sans-serif;
+}
+
+html,
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+select {
+  font-size: 16px; /* stops iPhone zooming in on focus */
+}
+
+.field {
+  @apply w-full rounded-xl border border-black/10 bg-white px-3 py-3 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20;
+}
+
+.flip {
+  perspective: 1000px;
+}
+.flip-inner {
+  transition: transform 0.4s;
+  transform-style: preserve-3d;
+}
+.flip-inner.flipped {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
