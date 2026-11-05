@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AudioRecorder } from "@/components/Audio";
 import { Button, Card, ErrorText, Screen, Spinner, useRequirePair } from "@/components/ui";
 import { supabase } from "@/lib/supabase/client";
+import { pingNotify } from "@/lib/notify";
 import { uploadAudio } from "@/lib/audio";
 import { buildQuiz } from "@/lib/quiz";
 import { langDir, langName } from "@/lib/config";
@@ -72,6 +73,7 @@ function NewChallenge() {
         pair_id: app.pair!.id, author_id: app.me!.id, recipient_id: app.partner!.id, ...row,
       }).select("id").single();
       if (error) throw error;
+      pingNotify();
       router.replace(`/challenge/${data.id}?sent=1`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong.");

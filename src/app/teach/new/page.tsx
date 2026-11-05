@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AudioRecorder } from "@/components/Audio";
 import { Button, Card, ErrorText, Screen, Spinner, useRequirePair } from "@/components/ui";
 import { supabase } from "@/lib/supabase/client";
+import { pingNotify } from "@/lib/notify";
 import { uploadAudio } from "@/lib/audio";
 import { langDir, langName } from "@/lib/config";
 import { randomPrompt } from "@/lib/prompts";
@@ -81,6 +82,7 @@ function TeachForm() {
       const { error: e2 } = await sb.from("items").insert(rows);
       if (e2) throw e2;
       if (request) await sb.from("requests").update({ done_at: new Date().toISOString() }).eq("id", request.id);
+      pingNotify();
       router.replace(`/lesson/${lesson.id}?sent=1`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong. Try again.");

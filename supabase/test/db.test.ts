@@ -1,6 +1,6 @@
 // Runs the real migration in an in-memory Postgres (PGlite) and plays two partners.
 import { PGlite } from "@electric-sql/pglite";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
 
@@ -24,7 +24,9 @@ beforeAll(async () => {
   db = new PGlite();
   const dir = join(__dirname, "..");
   await db.exec(readFileSync(join(dir, "test/stubs.sql"), "utf8"));
-  await db.exec(readFileSync(join(dir, "migrations/0001_core.sql"), "utf8"));
+  for (const f of readdirSync(join(dir, "migrations")).sort()) {
+    await db.exec(readFileSync(join(dir, "migrations", f), "utf8"));
+  }
   // Supabase grants table access to "authenticated"; RLS then filters rows.
   await db.exec(`
     grant select, insert, update, delete on all tables in schema public to authenticated;

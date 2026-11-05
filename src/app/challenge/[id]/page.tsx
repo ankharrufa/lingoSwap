@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { AudioRecorder, PlayButton } from "@/components/Audio";
 import { Button, Card, ErrorText, Screen, Spinner, T, timeAgo, useRequirePair } from "@/components/ui";
 import { supabase } from "@/lib/supabase/client";
+import { pingNotify } from "@/lib/notify";
 import { uploadAudio } from "@/lib/audio";
 import { answersMatch } from "@/lib/normalize";
 import { scoreQuiz, type QuizQuestion } from "@/lib/quiz";
@@ -45,15 +46,17 @@ function ChallengeView({ id }: { id: string }) {
     const { error } = await supabase().rpc("submit_attempt", {
       p_challenge: id, p_answer: answer, p_score: score, p_audio: audio,
     });
-    if (error) setError(error.message);
-    else await load();
+    if (error) return setError(error.message);
+    pingNotify();
+    await load();
   }
 
   async function rate(rating: string) {
     if (!attempt) return;
     const { error } = await supabase().rpc("rate_attempt", { p_attempt: attempt.id, p_rating: rating });
-    if (error) setError(error.message);
-    else await load();
+    if (error) return setError(error.message);
+    pingNotify();
+    await load();
   }
 
   return (

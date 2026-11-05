@@ -2,7 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Keeps the login session fresh and sends signed-out visitors to /login.
-const PUBLIC_PATHS = ["/", "/login", "/auth"];
+// "/api" routes check access themselves (the daily email job has no login).
+const PUBLIC_PATHS = ["/", "/login", "/auth", "/api"];
 
 export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

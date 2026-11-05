@@ -3,6 +3,7 @@ export type Profile = {
   display_name: string;
   native_lang: string;
   learning_lang: string;
+  email_notify?: boolean;
 };
 
 export type Pair = {

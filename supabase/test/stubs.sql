@@ -1,6 +1,7 @@
 -- Minimal stand-ins for Supabase's auth and storage schemas, used only in local tests.
 create role authenticated nologin;
 create role anon nologin;
+create role service_role nologin bypassrls;
 create schema auth;
 create table auth.users (id uuid primary key, email text);
 create function auth.uid() returns uuid language sql stable as $$
@@ -16,6 +17,6 @@ alter table storage.objects enable row level security;
 create function storage.foldername(name text) returns text[] language sql immutable as $$
   select (string_to_array(name, '/'))[1:array_length(string_to_array(name, '/'), 1) - 1]
 $$;
-grant usage on schema auth, storage, public to authenticated;
+grant usage on schema auth, storage, public to authenticated, service_role;
 grant execute on function auth.uid() to authenticated;
 grant select, insert on storage.objects to authenticated;

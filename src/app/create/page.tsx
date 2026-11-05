@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { BottomNav, Button, Card, ErrorText, Screen, Spinner, useRequirePair } from "@/components/ui";
 import { supabase } from "@/lib/supabase/client";
+import { pingNotify } from "@/lib/notify";
 import { langName } from "@/lib/config";
 
 export default function Create() {
@@ -18,6 +19,7 @@ export default function Create() {
     const { error } = await supabase().from("requests")
       .insert({ pair_id: app.pair!.id, from_id: app.me!.id, text: ask.trim() });
     if (error) return setError(error.message);
+    pingNotify();
     setAsk("");
     setSent(true);
   }
